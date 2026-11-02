@@ -1,16 +1,14 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { AuthProvider } from '@/lib/auth';
 import { cv } from '@/components/ui';
-import { MapPin } from "lucide-react";
-import { FaFacebook } from "react-icons/fa";
+import PlaceholderMedia from '@/components/PlaceholderMedia';
 
 export const metadata: Metadata = {
-  title: "Tolit's Butcheron Basketball",
-  description: "Community basketball platform powered by Tolit's Butcheron",
+  title: "Basketball",
+  description: "Community basketball platform for players, teams, matches, and statistics.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -28,86 +26,49 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 >
   <div className="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 items-center text-center md:text-left">
     
-    {/* Logo + Brand */}
+    {/* League identity */}
     <div className="flex flex-col items-center">
-      <Image
-        src="/logos/tolit-business-logo.jpg"
-        alt="Tolit's Butcheron"
-        width={56}
-        height={56}
-        className="rounded-full mb-3 object-cover shadow-md"
-      />
+      <PlaceholderMedia label="League logo placeholder" kind="logo" compact className="w-14 h-14 rounded-full mb-3 shadow-md" />
 
       <p className="text-sm" style={{ color: cv.textMuted }}>
-        Powered by{" "}
         <span
           className="font-bold tracking-wide"
           style={{ color: cv.primaryLight }}
         >
-          TOLIT&apos;S BUTCHERON
+          COMMUNITY BASKETBALL LEAGUE
         </span>
       </p>
 
       <p className="text-xs mt-1" style={{ color: cv.textDim }}>
-        Fresh cuts, every day. 🥩
+        Players, games, and stats in one place.
       </p>
     </div>
 
-    {/* Address */}
+    {/* Venue */}
     <div className="flex flex-col items-center gap-2">
       <p
         className="text-sm font-semibold"
         style={{ color: cv.primaryLight }}
       >
-        Visit Us
+        League Venue
       </p>
 
-      <div className="flex items-start gap-2 text-xs">
-        <MapPin size={16} className="mt-0.5 opacity-80" />
-        <span style={{ color: cv.textMuted }}>
-          001 Patulo Diaz Compound, Loma de Gato, Marilao, Bulacan
-        </span>
-      </div>
+      <p className="text-xs" style={{ color: cv.textMuted }}>
+        Venue details placeholder
+      </p>
     </div>
 
-    {/* Socials */}
+    {/* Contact */}
     <div className="flex flex-col items-center  gap-2">
       <p
         className="text-sm font-semibold"
         style={{ color: cv.primaryLight }}
       >
-        Connect With Us
+        League Contact
       </p>
-
-      <div className="flex gap-3">
-        <a
-          href="https://www.facebook.com/tolits.francisco.752"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-md"
-          style={{
-            backgroundColor: cv.surface,
-            color: cv.textMuted,
-          }}
-        >
-          <FaFacebook size={24} />
-          <span className="text-xs">Tolit&apos;s Butcheron</span>
-        </a>
-
-        <a
-          href="https://www.facebook.com/profile.php?id=100094452100772"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-md"
-          style={{
-            backgroundColor: cv.surface,
-            color: cv.textMuted,
-          }}
-        >
-          <FaFacebook size={24} />
-          <span className="text-xs">Tolit&apos;s Butcheron Basketball</span>
-        </a>
-      </div>
+      <p className="text-xs" style={{ color: cv.textMuted }}>
+        Contact and social links placeholder
+      </p>
     </div>
   </div>
 
@@ -116,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     className="text-center text-xs py-3 border-t"
     style={{ borderColor: cv.border, color: cv.textDim }}
   >
-    © {new Date().getFullYear()} Tolit&apos;s Butcheron. All rights reserved.
+    © {new Date().getFullYear()} Community Basketball League. All rights reserved.
   </div>
 </footer>
         </AuthProvider>

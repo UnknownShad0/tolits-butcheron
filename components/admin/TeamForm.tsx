@@ -1,28 +1,13 @@
 'use client';
-import { useRef, useState } from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 import { Input, Btn, Card, SectionTitle, colors } from '@/components/ui';
 import { apiFetch } from '@/lib/api';
 import type { Team } from '@/lib/types';
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
+import PlaceholderMedia from '@/components/PlaceholderMedia';
 
 export default function TeamForm({ teams, onAdd }: { teams: Team[]; onAdd: (t: Team) => void }) {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
-  const logoRef = useRef<HTMLInputElement>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    } else {
-      setPreview(null);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,12 +15,9 @@ export default function TeamForm({ teams, onAdd }: { teams: Team[]; onAdd: (t: T
     try {
       const fd = new FormData();
       fd.append('name', name);
-      if (logoRef.current?.files?.[0]) fd.append('logo', logoRef.current.files[0]);
       const t = await apiFetch<Team>('/teams', { method: 'POST', body: fd });
       onAdd(t);
       setName('');
-      if (logoRef.current) logoRef.current.value = '';
-      setPreview(null);
     } finally {
       setLoading(false);
     }
@@ -47,16 +29,9 @@ export default function TeamForm({ teams, onAdd }: { teams: Team[]; onAdd: (t: T
         <SectionTitle>Add Team</SectionTitle>
         <form onSubmit={handleSubmit} className="space-y-3">
           <Input placeholder="Team name" value={name} onChange={(e) => setName(e.target.value)} required />
-          <div>
-            <label className="text-xs block mb-1.5" style={{ color: colors.textDim }}>Logo (optional)</label>
-            <input ref={logoRef} type="file" accept="image/*" onChange={handleFileChange}
-              className="text-sm w-full file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:font-bold file:cursor-pointer file:text-sm"
-              style={{ color: colors.textMuted }} />
-            {preview && (
-              <div className="mt-2">
-                <Image src={preview} alt="Preview" width={80} height={80} className="rounded-full object-cover border-2" style={{ borderColor: colors.primary }} />
-              </div>
-            )}
+          <div className="flex items-center gap-3 rounded-lg border p-3" style={{ borderColor: colors.border }}>
+            <PlaceholderMedia label="Team logo placeholder" kind="logo" compact className="w-10 h-10 rounded-full flex-shrink-0" />
+            <p className="text-xs" style={{ color: colors.textDim }}>Team images are disabled; a neutral placeholder is used throughout the site.</p>
           </div>
           <Btn type="submit" full disabled={loading}>{loading ? 'Adding…' : 'Add Team'}</Btn>
         </form>
@@ -68,10 +43,7 @@ export default function TeamForm({ teams, onAdd }: { teams: Team[]; onAdd: (t: T
           <ul className="space-y-2">
             {teams.map((t) => (
               <li key={t.id} className="flex items-center gap-3 py-2 border-b last:border-0" style={{ borderColor: colors.border }}>
-                {t.logo_path
-                  ? <Image src={`${STORAGE}/${t.logo_path}`} alt={t.name} width={36} height={36} className="rounded-full object-cover border-2 flex-shrink-0" style={{ borderColor: colors.primary }} />
-                  : <div className="w-9 h-9 rounded-full flex items-center justify-center text-lg flex-shrink-0" style={{ backgroundColor: colors.border }}>🏀</div>
-                }
+                <PlaceholderMedia label="Team logo placeholder" kind="logo" compact className="w-9 h-9 rounded-full flex-shrink-0" />
                 <span className="font-semibold text-sm" style={{ color: colors.text }}>{t.name}</span>
               </li>
             ))}

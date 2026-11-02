@@ -1,11 +1,11 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cv } from './ui';
 import { useTheme } from './ThemeProvider';
 import { useAuth } from '@/lib/auth';
+import PlaceholderMedia from './PlaceholderMedia';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -34,18 +34,17 @@ export default function Navbar() {
     <>
       {/* MVP Banner */}
       <div className="text-center text-xs py-2 font-bold tracking-widest uppercase" style={{ backgroundColor: cv.gold, color: cv.bg }}>
-        🏆 MVP of the Week wins FREE Tolit&apos;s Butcheron! 🥩
+        🏆 MVP of the Week — weekly prize details coming soon!
       </div>
 
       {/* Navbar */}
       <nav className="px-4 flex items-center border-b" style={{ backgroundColor: cv.surfaceDeep, borderColor: cv.primary }}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 py-3 flex-shrink-0" onClick={() => setOpen(false)}>
-          <Image src="/logos/tolits-basketball-logo.jpg" alt="Tolit's Basketball" width={36} height={36}
-            className="rounded-full object-cover border-2" style={{ borderColor: cv.primary }} />
+          <PlaceholderMedia label="League logo placeholder" kind="logo" compact className="w-9 h-9 rounded-full border-2" />
           <div className="leading-tight">
             <p className="font-display font-extrabold uppercase tracking-wider text-sm leading-none" style={{ color: cv.primaryLight }}>
-              Tolit&apos;s Butcheron
+              Community Basketball
             </p>
             <p className="text-[9px] uppercase tracking-widest hidden sm:block" style={{ color: cv.textDim }}>
               Basketball League

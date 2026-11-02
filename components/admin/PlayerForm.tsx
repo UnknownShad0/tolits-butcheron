@@ -1,31 +1,17 @@
 'use client';
-import { useRef, useState } from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 import { Input, Select, Btn, Card, SectionTitle, colors } from '@/components/ui';
 import { apiFetch } from '@/lib/api';
 import type { Team, Player } from '@/lib/types';
+import PlaceholderMedia from '@/components/PlaceholderMedia';
 
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
 const POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C'];
 
 export default function PlayerForm({ teams, players, onAdd }: { teams: Team[]; players: Player[]; onAdd: (p: Player) => void }) {
   const [form, setForm] = useState({ name: '', team_id: '', position: '', jersey_number: '' });
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
-  const photoRef = useRef<HTMLInputElement>(null);
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
-    } else {
-      setPreview(null);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,12 +19,9 @@ export default function PlayerForm({ teams, players, onAdd }: { teams: Team[]; p
     try {
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => { if (v !== '') fd.append(k, v); });
-      if (photoRef.current?.files?.[0]) fd.append('photo', photoRef.current.files[0]);
       const p = await apiFetch<Player>('/players', { method: 'POST', body: fd });
       onAdd(p);
       setForm({ name: '', team_id: '', position: '', jersey_number: '' });
-      if (photoRef.current) photoRef.current.value = '';
-      setPreview(null);
     } finally {
       setLoading(false);
     }
@@ -59,16 +42,9 @@ export default function PlayerForm({ teams, players, onAdd }: { teams: Team[]; p
             {POSITIONS.map((pos) => <option key={pos} value={pos}>{pos}</option>)}
           </Select>
           <Input placeholder="Jersey #" value={form.jersey_number} onChange={set('jersey_number')} />
-          <div className="sm:col-span-2">
-            <label className="text-xs block mb-1.5" style={{ color: colors.textDim }}>Profile Photo (optional)</label>
-            <input ref={photoRef} type="file" accept="image/*" onChange={handleFileChange}
-              className="text-sm w-full file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:font-bold file:cursor-pointer file:text-sm"
-              style={{ color: colors.textMuted }} />
-            {preview && (
-              <div className="mt-2">
-                <Image src={preview} alt="Preview" width={80} height={80} className="rounded-full object-cover border-2" style={{ borderColor: colors.primary }} />
-              </div>
-            )}
+          <div className="sm:col-span-2 flex items-center gap-3 rounded-lg border p-3" style={{ borderColor: colors.border }}>
+            <PlaceholderMedia label="Player photo placeholder" kind="person" compact className="w-10 h-10 rounded-full flex-shrink-0" />
+            <p className="text-xs" style={{ color: colors.textDim }}>Player images are disabled; a neutral placeholder is used throughout the site.</p>
           </div>
           <div className="sm:col-span-2">
             <Btn type="submit" full disabled={loading}>{loading ? 'Adding…' : 'Add Player'}</Btn>
@@ -83,11 +59,7 @@ export default function PlayerForm({ teams, players, onAdd }: { teams: Team[]; p
             {players.map((p) => (
               <li key={p.id} className="flex items-center justify-between py-2 border-b last:border-0 text-sm" style={{ borderColor: colors.border }}>
                 <div className="flex items-center gap-3">
-                  {p.photo_path ? (
-                    <Image src={`${STORAGE}/${p.photo_path}`} alt={p.name} width={32} height={32} className="rounded-full object-cover border-2 flex-shrink-0" style={{ borderColor: colors.primary }} />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0" style={{ backgroundColor: colors.border }}>👤</div>
-                  )}
+                  <PlaceholderMedia label="Player photo placeholder" kind="person" compact className="w-8 h-8 rounded-full flex-shrink-0" />
                   <span className="font-bold w-6 text-center text-xs" style={{ color: colors.gold }}>{p.jersey_number ?? '—'}</span>
                   <span className="font-semibold" style={{ color: colors.text }}>{p.name}</span>
                   {p.position && <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: colors.border, color: colors.textMuted }}>{p.position}</span>}

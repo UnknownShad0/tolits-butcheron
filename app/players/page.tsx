@@ -1,12 +1,10 @@
 'use client';
 import { useMemo, useState } from 'react';
-import Image from 'next/image';
 import { cv } from '@/components/ui';
 import { useFetch } from '@/lib/useFetch';
 import { FetchError, FetchLoading } from '@/components/FetchState';
 import type { Player } from '@/lib/types';
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
+import PlaceholderMedia from '@/components/PlaceholderMedia';
 type SortKey = 'none' | 'team' | 'position';
 
 export default function PlayersPage() {
@@ -58,9 +56,7 @@ export default function PlayersPage() {
               {sorted.map((p, i) => (
                 <tr key={p.id} className="border-t" style={{ backgroundColor: i % 2 === 0 ? cv.surface : cv.surfaceDeep, borderColor: cv.border }}>
                   <td className="px-4 py-2">
-                    {p.photo_path
-                      ? <Image src={`${STORAGE}/${p.photo_path}`} alt={p.name} width={36} height={36} className="rounded-full object-cover border-2" style={{ borderColor: cv.primary }} />
-                      : <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ backgroundColor: cv.border }}>👤</div>}
+                    <PlaceholderMedia label="Player photo placeholder" kind="person" compact className="w-9 h-9 rounded-full border-2" />
                   </td>
                   <td className="px-4 py-2 font-bold" style={{ color: cv.gold }}>{p.jersey_number ?? '—'}</td>
                   <td className="px-4 py-2 font-semibold" style={{ color: cv.text }}>{p.name}</td>

@@ -1,8 +1,8 @@
 export const initialData = {
-  league: "Tolits Basketball League",
+  league: "Community Basketball League",
   division: "Senior Division",
   game_no: "12",
-  venue: "Tolits Gymnasium",
+  venue: "Community Gymnasium",
   game_date: "2026-06-05",
   game_time: "19:00",
   officials: {

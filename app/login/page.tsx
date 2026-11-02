@@ -1,15 +1,15 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { useAuth } from '@/lib/auth';
 import { Input, Btn, cv } from '@/components/ui';
+import PlaceholderMedia from '@/components/PlaceholderMedia';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
-  const [email, setEmail]       = useState('admin@tolits.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail]       = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
 
@@ -34,15 +34,13 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center mb-6">
-          <Image src="/logos/tolits-basketball-logo.jpg" alt="Tolit's Basketball"
-            width={64} height={64} className="rounded-full object-cover border-2 mb-3"
-            style={{ borderColor: cv.primary }} />
+          <PlaceholderMedia label="League logo placeholder" kind="logo" compact className="w-16 h-16 rounded-full border-2 mb-3" />
           <h1 className="font-display font-extrabold uppercase tracking-widest text-lg"
             style={{ color: cv.primaryLight }}>
             Admin Login
           </h1>
           <p className="text-xs mt-1" style={{ color: cv.textDim }}>
-            Tolit&apos;s Butcheron Basketball
+            Community Basketball League
           </p>
         </div>
 
@@ -56,7 +54,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="admin@tolits.com"
+              placeholder="admin@example.com"
               required
               autoComplete="email"
             />

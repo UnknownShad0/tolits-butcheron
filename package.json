@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "predeploy": "GITHUB_PAGES=true next build",
+    "deploy": "gh-pages -d out --dotfiles"
   },
   "dependencies": {
     "lucide-react": "^1.9.0",

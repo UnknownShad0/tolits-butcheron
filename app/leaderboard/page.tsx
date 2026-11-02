@@ -1,11 +1,9 @@
 'use client';
-import Image from 'next/image';
 import { cv } from '@/components/ui';
 import { useFetch } from '@/lib/useFetch';
 import { FetchError, FetchLoading } from '@/components/FetchState';
 import type { LeaderboardEntry } from '@/lib/types';
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
+import PlaceholderMedia from '@/components/PlaceholderMedia';
 
 export default function LeaderboardPage() {
   const { data: leaders, error, loading } = useFetch<LeaderboardEntry[]>('/leaderboard');
@@ -14,7 +12,7 @@ export default function LeaderboardPage() {
     <div>
       <h1 className="font-display text-4xl font-extrabold uppercase tracking-wide mb-1" style={{ color: cv.text }}>Leaderboard</h1>
       <p className="text-sm font-semibold mb-6" style={{ color: cv.gold }}>
-        🏆 Top scorer this week wins FREE Tolit&apos;s Butcheron!
+        🏆 Top scorer recognition is updated every week.
       </p>
       {error && <FetchError message={error} />}
       {loading && <FetchLoading />}
@@ -40,9 +38,7 @@ export default function LeaderboardPage() {
                       {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}
                     </td>
                     <td className="px-3 py-2">
-                      {l.player?.photo_path
-                        ? <Image src={`${STORAGE}/${l.player.photo_path}`} alt={l.player.name ?? ''} width={36} height={36} className="rounded-full object-cover border-2" style={{ borderColor: cv.primary }} />
-                        : <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ backgroundColor: cv.border }}>👤</div>}
+                      <PlaceholderMedia label="Player photo placeholder" kind="person" compact className="w-9 h-9 rounded-full border-2" />
                     </td>
                     <td className="px-4 py-3 font-semibold" style={{ color: cv.text }}>{l.player?.name ?? `Player #${l.player_id}`}</td>
                     <td className="px-4 py-3" style={{ color: cv.primaryLight }}>{l.player?.team?.name ?? '—'}</td>
@@ -56,9 +52,9 @@ export default function LeaderboardPage() {
             </table>
           </div>
           <div className="mt-6 rounded-xl p-4 flex items-center gap-3 border" style={{ backgroundColor: cv.surface, borderColor: cv.border }}>
-            <Image src="/logos/tolit-business-logo.jpg" alt="Tolit's" width={40} height={40} className="rounded-full object-cover flex-shrink-0" />
+            <PlaceholderMedia label="Sponsor logo placeholder" kind="logo" compact className="w-10 h-10 rounded-full flex-shrink-0" />
             <p className="text-sm" style={{ color: cv.textMuted }}>
-              🥩 <strong style={{ color: cv.primaryLight }}>Powered by Tolit&apos;s Butcheron</strong> — The #1 player each week earns a free butcheron pack. Keep grinding!
+              <strong style={{ color: cv.primaryLight }}>Sponsor space available.</strong> Approved sponsor details and weekly prize information can be added here.
             </p>
           </div>
         </>
